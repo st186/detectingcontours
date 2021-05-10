@@ -69,6 +69,17 @@ def floodFillCustom(originalImage, seed):
     cv2.floodFill(foreground, None, seed, (0, 0, 0),
                   loDiff=(5, 5, 5), upDiff=(5, 5, 5))
     return [foreground, originalImage]
+    # h,w,chn = originalImage.shape
+
+    # mask = np.zeros((h+2,w+2),np.uint8)
+
+    # floodflags = 4
+    # floodflags |= cv2.FLOODFILL_MASK_ONLY
+    # floodflags |= (255 << 8)
+
+    # num,im,mask,rect = cv2.floodFill(originalImage, mask, seed, (255,0,0), (10,)*3, (10,)*3, floodflags)
+
+    # return [mask, originalImage]
 
 # Convert to Grayscale
 
@@ -153,7 +164,7 @@ def getSortedContours(image) -> np.array:
     return ctrs
 
 
-def getFilteredLabelIndex(stats, widthLowLimit=30, heightLowLimit=10, areaLowLimit=1500, areaHighLimit=40000):
+def getFilteredLabelIndex(stats, areaHighLimit, widthLowLimit=10, heightLowLimit=10, areaLowLimit=1000):
     ret = []
     for i in range(1, stats.shape[0]):
         # extract the connected component statistics for the current label
