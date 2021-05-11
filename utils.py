@@ -164,20 +164,26 @@ def getSortedContours(image) -> np.array:
     return ctrs
 
 
-def getFilteredLabelIndex(stats, areaHighLimit, widthLowLimit=10, heightLowLimit=10, areaLowLimit=1000):
+def getFilteredLabelIndex(stats, areaHighLimit, widthLowLimit=10, widthUpperLimit=700, heightUpperLimit=700, heightLowLimit=10, areaLowLimit=1000):
     ret = []
     for i in range(1, stats.shape[0]):
         # extract the connected component statistics for the current label
         w = stats[i, cv2.CC_STAT_WIDTH]
         h = stats[i, cv2.CC_STAT_HEIGHT]
         area = stats[i, cv2.CC_STAT_AREA]
+        # print("height", h, "width", w)
+        # print(area)
 
-        keepWidth = w > widthLowLimit
-        keepHeight = h > heightLowLimit
-        keepArealow = area > areaLowLimit
-        keepAreahigh = area < areaHighLimit
+        keepWidthLow = w > widthLowLimit
+        keepHeightLow = h > heightLowLimit
+        keepAreaLow = area > areaLowLimit
+        keepAreaHigh = area < areaHighLimit
+        keepWidthHigh = w < widthUpperLimit
+        keepHeightHigh = h < heightUpperLimit
 
-        if all((keepWidth, keepHeight, keepArealow, keepAreahigh)):
+        if all((keepWidthLow, keepHeightLow, keepAreaLow, keepAreaHigh, keepWidthHigh, keepHeightHigh)):
+        #if all((keepWidthLow, keepHeightLow, keepAreaLow)):
+        
             ret.append(i)
 
     return ret

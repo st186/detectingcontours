@@ -88,7 +88,7 @@ cv2.imshow("gray", gray)
 threshImg = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)[1]
 h_threshold,w_threshold = threshImg.shape
 area = h_threshold*w_threshold
-print(area)
+print(area/2)
 
 cv2.imshow("threshImg", threshImg)
 
