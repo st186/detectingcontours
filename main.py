@@ -98,7 +98,7 @@ cv2.waitKey(0)
 (numLabels, labels, stats, centroids) = cv2.connectedComponentsWithStats(
     threshImg, 4, cv2.CV_32S)
 
-filteredIdx = getFilteredLabelIndex(stats, areaHighLimit=area/2) # here we have to ensure that the height and the weight of the rectangle is neither to big or too small.
+filteredIdx = getFilteredLabelIndex(stats, areaHighLimit=area/2, heightUpperLimit=h_threshold*0.9, widthUpperLimit=w_threshold*0.9) # here we have to ensure that the height and the weight of the rectangle is neither to big or too small.
 
 for i in filteredIdx:
     # extract the connected component statistics for the current label
