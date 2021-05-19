@@ -18,9 +18,9 @@ ap.add_argument("-i", "--image", required = True,
 args = vars(ap.parse_args())
 
 image = cv2.imread(args["image"])
-image = cv2.resize(image, (1080, 1080))
+image = cv2.resize(image, (800, 800))
 h,w,chn = image.shape
-ratio = image.shape[0] / 1080.0
+ratio = image.shape[0] / 800.0
 orig = image.copy()
 #image = imutils.resize(image, height = 500)
 # convert the image to grayscale, blur it, and find edges
@@ -71,8 +71,7 @@ print("STEP 3: Apply perspective transform")
 # cv2.imshow("Original", orig)
 # cv2.imshow("Scanned", warped)
 
-seed = (70, 70)
-
+seed = (10, 10)
 foreground, birdEye = floodFillCustom(warped, seed)
 cv2.circle(birdEye, seed, 50, (0, 255, 0), -1)
 cv2.imshow("originalImg", birdEye)
@@ -84,11 +83,11 @@ cv2.imshow("birdEye", birdEye)
 
 gray = cv2.cvtColor(foreground, cv2.COLOR_BGR2GRAY)
 cv2.imshow("gray", gray)
+cv2.imwrite("gray.jpg", gray)
 
 threshImg = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)[1]
 h_threshold,w_threshold = threshImg.shape
 area = h_threshold*w_threshold
-print(area/2)
 
 cv2.imshow("threshImg", threshImg)
 
@@ -97,7 +96,7 @@ cv2.waitKey(0)
 # find distinct objects
 (numLabels, labels, stats, centroids) = cv2.connectedComponentsWithStats(
     threshImg, 4, cv2.CV_32S)
-
+print("No of contours",len(stats))
 filteredIdx = getFilteredLabelIndex(stats, areaHighLimit=area/2, heightUpperLimit=h_threshold*0.9, widthUpperLimit=w_threshold*0.9) # here we have to ensure that the height and the weight of the rectangle is neither to big or too small.
 
 for i in filteredIdx:

@@ -331,3 +331,5 @@ def findExternalContour(image, originalImage=None):
         if len(approx) == 4:
             screenCnt = approx
             return screenCnt
+
+        
